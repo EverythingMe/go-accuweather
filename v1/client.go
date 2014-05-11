@@ -54,12 +54,13 @@ func GetLocationByLatLon(lat, lon float64) (*LocationResponse, error) {
 	return response.(*LocationResponse), nil
 }
 
-func GetLocalWeather(locationKey, locale string) (*LocalWeatherResponse, error) {
+func GetLocalWeather(locationKey, locale string, metric bool) (*LocalWeatherResponse, error) {
 	var endpoint = fmt.Sprintf("localweather/v1/%s", locationKey)
 	values := url.Values{}
 
 	// TODO: check if locale is a valid one?
 	values.Set("language", locale)
+	values.Set("metric", fmt.Sprintf("%t", metric))
 
 	response, e := client.makeRequest(endpoint, &values, reflect.TypeOf(LocalWeatherResponse{}))
 

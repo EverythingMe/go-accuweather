@@ -39,9 +39,25 @@ func Test_GetLocationByLatLon(t *testing.T) {
 }
 
 func Test_GetLocalWeather(t *testing.T) {
-	_, e := GetLocalWeather("215854", "en")
+	weather, e := GetLocalWeather("215854", "en", false)
 
 	if e != nil {
 		t.Fatalf("Got error while requesting local weather: %s", e)
+	}
+
+	if weather.CurrentConditions.Temperature.Unit != "F" {
+		t.Fatalf("Expected imperial units, but got metric (%s)", weather.CurrentConditions.Temperature.Unit)
+	}
+}
+
+func Test_GetLocalWeatherMetric(t *testing.T) {
+	weather, e := GetLocalWeather("215854", "en", true)
+
+	if e != nil {
+		t.Fatalf("Got error while requesting local weather: %s", e)
+	}
+
+	if weather.CurrentConditions.Temperature.Unit != "C" {
+		t.Fatalf("Expected metric units, but got imperial (%s)", weather.CurrentConditions.Temperature.Unit)
 	}
 }
