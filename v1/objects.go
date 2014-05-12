@@ -102,15 +102,51 @@ type Icon struct {
 	Icon       int
 }
 
+type Conditions struct {
+	Temperature Temperature
+
+	IsDaylight    bool
+	DateTime      string
+	EpochDateTime int
+	IconPhrase    string
+	WeatherIcon   int
+
+	Link       string
+	MobileLink string
+}
+
 type CurrentConditions struct {
+	Temperature Temperature
+
+	IsDayTime                bool
 	LocalObservationDateTime string
 	EpochTime                int
 	WeatherText              string
 	WeatherIcon              int
-	IsDayTime                bool
-	Link                     string
-	MobileLink               string
-	Temperature              Temperature
+
+	Link       string
+	MobileLink string
+}
+
+func (c *CurrentConditions) GetConditions() *Conditions {
+	var conditions = &Conditions{
+		Temperature:   c.Temperature,
+		IsDaylight:    c.IsDayTime,
+		DateTime:      c.LocalObservationDateTime,
+		EpochDateTime: c.EpochTime,
+		IconPhrase:    c.WeatherText,
+		WeatherIcon:   c.WeatherIcon,
+		Link:          c.Link,
+		MobileLink:    c.MobileLink,
+	}
+
+	return conditions
+}
+
+type HourlyForecast struct {
+	Conditions
+
+	PrecipitationProbability float64
 }
 
 type DailyForecast struct {
@@ -122,18 +158,6 @@ type DailyForecast struct {
 	Date        string
 	EpochDate   int
 	MobileLink  string
-}
-
-type HourlyForecast struct {
-	Temperature              Temperature
-	IsDaylight               bool
-	DateTime                 string
-	PrecipitationProbability float64
-	WeatherIcon              int
-	Link                     string
-	MobileLink               string
-	EpochDateTime            int
-	IconPhrase               string
 }
 
 type Headline struct {
