@@ -103,7 +103,8 @@ type Icon struct {
 }
 
 type Conditions struct {
-	Temperature Temperature
+	Temperature       Temperature
+	TemperatureMinMax TemperatureMinMax
 
 	IsDaylight    bool
 	DateTime      string
@@ -152,12 +153,27 @@ type HourlyForecast struct {
 type DailyForecast struct {
 	Temperature TemperatureMinMax
 	Sources     []string
-	Link        string
 	Night       Icon
 	Day         Icon
-	Date        string
 	EpochDate   int
+	Date        string
+	Link        string
 	MobileLink  string
+}
+
+func (df *DailyForecast) GetConditions() *Conditions {
+	var conditions = &Conditions{
+		Temperature:       df.Temperature.Maximum,
+		TemperatureMinMax: df.Temperature,
+		DateTime:          df.Date,
+		EpochDateTime:     df.EpochDate,
+		IconPhrase:        df.Day.IconPhrase,
+		WeatherIcon:       df.Day.Icon,
+		Link:              df.Link,
+		MobileLink:        df.MobileLink,
+	}
+
+	return conditions
 }
 
 type Headline struct {
