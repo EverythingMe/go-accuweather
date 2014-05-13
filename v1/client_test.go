@@ -50,6 +50,30 @@ func Test_GetLocalWeather(t *testing.T) {
 	}
 }
 
+func testLocale(testValue, expected string, t *testing.T) {
+	var actual = verifyLocale(testValue)
+
+	if actual != expected {
+		t.Fatalf("verifyLocale returned wrong locale (expected: %s, actual: %s)", expected, actual)
+	}
+}
+
+func Test_verifyLocaleWithGoodLocale(t *testing.T) {
+	testLocale("en-us", "en-us", t)
+}
+
+func Test_verifyLocaleWithGoodLocaleUpperCase(t *testing.T) {
+	testLocale("en-US", "en-us", t)
+}
+
+func Test_verifyLocaleWithGoodLanguageBadCountryCode(t *testing.T) {
+	testLocale("en-IL", "en", t)
+}
+
+func Test_verifyLocaleWithUnknownLocale(t *testing.T) {
+	testLocale("zz-ZZ", "en", t)
+}
+
 func Test_GetLocalWeatherMetric(t *testing.T) {
 	weather, e := GetLocalWeather("215854", "en", true)
 

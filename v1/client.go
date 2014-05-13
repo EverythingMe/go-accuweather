@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"strings"
 )
 
 type Client struct {
@@ -55,6 +56,8 @@ func GetLocationByLatLon(lat, lon float64) (*LocationResponse, error) {
 }
 
 func GetLocalWeather(locationKey, locale string, metric bool) (*LocalWeatherResponse, error) {
+	locale = verifyLocale(locale)
+
 	var endpoint = fmt.Sprintf("localweather/v1/%s", locationKey)
 	values := url.Values{}
 
@@ -69,6 +72,20 @@ func GetLocalWeather(locationKey, locale string, metric bool) (*LocalWeatherResp
 	}
 
 	return response.(*LocalWeatherResponse), nil
+}
+
+func verifyLocale(locale string) string {
+	locale = strings.ToLower(locale)
+	if SupportedLanguages[locale] {
+		return locale
+	}
+
+	var parts = strings.Split(locale, "-")
+	if SupportedLanguages[parts[0]] {
+		return parts[0]
+	}
+
+	return "en"
 }
 
 func parseResponse(body []byte, resType reflect.Type) (interface{}, error) {
