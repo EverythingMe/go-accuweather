@@ -1,7 +1,13 @@
 package accuweather
 
+import "fmt"
+
 //placeholder for a struct we don't need so we're not adding right now...
 type TBD interface{}
+
+func IconUrl(icon int) string {
+	return fmt.Sprintf("http://api.accuweather.com/developers/Media/Default/WeatherIcons/%02d-s.png", icon)
+}
 
 // Location Data structs:
 type Region struct {
